@@ -22,8 +22,8 @@ import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
 
-//    @Inject
-//    lateinit var viewModelFactory: ViewModelFactory
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as App).appComponent.inject(this)
