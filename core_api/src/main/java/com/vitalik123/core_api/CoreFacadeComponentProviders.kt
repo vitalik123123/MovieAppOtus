@@ -1,0 +1,3 @@
+package com.vitalik123.core_api
+
+interface CoreFacadeComponentProviders : CoreComponentProvider
