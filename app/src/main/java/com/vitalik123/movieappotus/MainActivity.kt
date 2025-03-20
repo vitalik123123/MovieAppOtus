@@ -4,38 +4,50 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModelProvider
-import com.vitalik123.core.di.ViewModelFactory
-import com.vitalik123.feature_home.presentation.HomeScreen
+import com.vitalik123.core_api.CoreFacadeComponentProviders
+import com.vitalik123.database.di.RoomFacadeComponentProviders
+import com.vitalik123.feature_details.presentation.DetailsScreen
 import com.vitalik123.movieappotus.app.App
-import com.vitalik123.movieappotus.ui.theme.MovieAppOtusTheme
-import javax.inject.Inject
+import com.vitalik123.movieappotus.navigation.NavGraph
+import com.vitalik123.network.di.NetworkFacadeComponentProviders
+import com.vitalik123.ui_kit.theme.MovieAppOtusTheme
 
 class MainActivity : ComponentActivity() {
 
-//    @Inject
-//    lateinit var viewModelFactory: ViewModelFactory
+    val coreComponent: CoreFacadeComponentProviders by lazy {
+        (application as App).coreFacadeComponent
+    }
 
+    val networkComponent: NetworkFacadeComponentProviders by lazy {
+        (application as App).networkFacadeComponent
+    }
+
+    val roomComponent: RoomFacadeComponentProviders by lazy {
+        (application as App).roomFacadeComponent
+    }
+
+
+    @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as App).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         setContent {
-//            MovieAppOtusTheme(
-//                viewModelFactory = viewModelFactory
-//            ) {
-//                HomeScreen()
-//            }
+            MovieAppOtusTheme {
+                NavGraph(
+                    coreComponent = coreComponent,
+                    networkComponent = networkComponent,
+                    roomComponent = roomComponent,
+                    modifier = Modifier.statusBarsPadding()
+                )
+            }
         }
     }
 }

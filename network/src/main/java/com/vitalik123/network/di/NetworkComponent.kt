@@ -7,5 +7,4 @@ import dagger.Component
     modules = [NetworkModule::class],
     dependencies = [CoreComponentProvider::class]
 )
-interface NetworkComponent {
-}
+interface NetworkComponent : NetworkComponentProvider

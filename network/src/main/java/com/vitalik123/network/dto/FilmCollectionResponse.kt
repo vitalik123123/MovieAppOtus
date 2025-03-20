@@ -11,7 +11,7 @@ data class FilmCollectionResponse(
 )
 
 data class FilmCollectionResponseItem(
-    val kinopoiskId: Int?,
+    val kinopoiskId: Long?,
     val nameRu: String?,
     val nameEn: String?,
     val nameOriginal: String?,

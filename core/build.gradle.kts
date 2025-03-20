@@ -52,4 +52,13 @@ dependencies {
     implementation(libs.javax.inject)
     ksp(libs.dagger.compiler)
     ksp(libs.dagger.android.processor)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.compose)
+
+    implementation(libs.retrofit.core)
+    implementation(libs.converter.gson)
+
+    //  OkHttp3
+    implementation(libs.okhttp.core)
+    implementation(libs.okhttp.logging.interceptor)
 }

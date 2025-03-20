@@ -1,6 +1,7 @@
 package com.vitalik123.movieappotus.di
 
 import android.content.Context
+import android.util.Log
 import com.vitalik123.core.di.CoreProvidesFactory
 import com.vitalik123.core_api.CoreComponentProvider
 import com.vitalik123.core_api.CoreFacadeComponentProviders

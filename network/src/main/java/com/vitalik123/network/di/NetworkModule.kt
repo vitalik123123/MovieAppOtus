@@ -2,7 +2,6 @@ package com.vitalik123.network.di
 
 import com.google.gson.GsonBuilder
 import com.vitalik123.core.utils.Constants
-import com.vitalik123.core_api.annotation.ApplicationScope
 import com.vitalik123.network.api.MovieApi
 import dagger.Module
 import dagger.Provides
@@ -21,7 +20,6 @@ class NetworkModule {
         retrofit.create(MovieApi::class.java)
 
     @Provides
-    @ApplicationScope
     fun provideRemoteBuildRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
@@ -31,7 +29,6 @@ class NetworkModule {
     }
 
     @Provides
-    @ApplicationScope
     fun provideRemoteBuildClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(object : Interceptor {
@@ -48,7 +45,6 @@ class NetworkModule {
     }
 
     @Provides
-    @ApplicationScope
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY

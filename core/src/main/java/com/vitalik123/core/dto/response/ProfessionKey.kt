@@ -1,0 +1,5 @@
+package com.vitalik123.core.dto.response
+
+enum class ProfessionKey {
+    WRITER, OPERATOR, EDITOR, COMPOSER, PRODUCER_USSR, TRANSLATOR, DIRECTOR, DESIGN, PRODUCER, ACTOR, VOICE_DIRECTOR, UNKNOWN
+}

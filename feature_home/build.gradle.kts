@@ -42,7 +42,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":network"))
-    implementation(project(":repository_home"))
+    implementation(project(":ui_kit"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -69,4 +69,20 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.compose)
+
+    implementation(libs.retrofit.core)
+    implementation(libs.converter.gson)
+
+    //  OkHttp3
+    implementation(libs.okhttp.core)
+    implementation(libs.okhttp.logging.interceptor)
+
+    //  Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
+
+    //  Mockito
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

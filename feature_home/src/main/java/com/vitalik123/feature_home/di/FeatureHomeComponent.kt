@@ -1,23 +1,23 @@
 package com.vitalik123.feature_home.di
 
 import com.vitalik123.core_api.CoreFacadeComponentProviders
-import com.vitalik123.core_api.annotation.ApplicationScope
-import com.vitalik123.core_api.annotation.FeatureHomeScope
-import com.vitalik123.feature_home.view_model.FeatureHomeViewModel
-import com.vitalik123.repository_home.di.RepositoryHomeModule
+import com.vitalik123.network.di.NetworkFacadeComponentProviders
+import com.vitalik123.network.di.NetworkModule
 import dagger.Component
 
 @Component(
-    modules = [RepositoryHomeModule::class, FeatureHomeModule::class],
-    dependencies = [CoreFacadeComponentProviders::class]
+    modules = [NetworkModule::class, RepositoryHomeModule::class, ViewModelModule::class, ViewModelFactoryModule::class],
+    dependencies = [CoreFacadeComponentProviders::class, NetworkFacadeComponentProviders::class]
 )
-interface FeatureHomeComponent{
+interface FeatureHomeComponent {
+    fun getViewModelFactory(): ViewModelFactory
 
     @Component.Factory
     interface Factory {
 
         fun create(
             coreFacadeComponentProviders: CoreFacadeComponentProviders,
+            networkFacadeComponentProviders: NetworkFacadeComponentProviders,
         ): FeatureHomeComponent
     }
 }

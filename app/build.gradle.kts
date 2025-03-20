@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -44,7 +45,12 @@ dependencies {
 
     implementation(project(":network"))
     implementation(project(":core"))
+    implementation(project(":database"))
     implementation(project(":feature_home"))
+    implementation(project(":feature_details"))
+    implementation(project(":feature_full_list"))
+    implementation(project(":feature_search"))
+    implementation(project(":ui_kit"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -62,6 +68,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.kotlinx.serialization.json)
+
+    //  #   Navigation
+    implementation(libs.navigation.compose)
 
     //  Dagger
     implementation(libs.dagger.core)
@@ -70,4 +80,17 @@ dependencies {
     implementation(libs.javax.inject)
     ksp(libs.dagger.compiler)
     ksp(libs.dagger.android.processor)
+
+    implementation(libs.retrofit.core)
+    implementation(libs.converter.gson)
+
+    //  OkHttp3
+    implementation(libs.okhttp.core)
+    implementation(libs.okhttp.logging.interceptor)
+
+    //  Room
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    implementation(libs.room.common)
+    ksp(libs.room.compiler)
 }
