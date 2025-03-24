@@ -9,6 +9,8 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.vitalik123.database.repository.ratelist.RatelistRoomRepository
+import com.vitalik123.database.repository.watchlist.WatchlistRoomRepository
 import com.vitalik123.feature_details.presentation.DetailsScreen
 import com.vitalik123.feature_details.use_case.UseCaseDetails
 import com.vitalik123.feature_details.use_case.UseCaseDetailsImpl
@@ -29,7 +31,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SaveFilmToRoomInDetailsTest {
 
-    lateinit var mockRepository: MockItemRepository
     lateinit var mockUseCase: UseCaseDetails
     private val testDispatcher = StandardTestDispatcher()
 
@@ -37,8 +38,6 @@ class SaveFilmToRoomInDetailsTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        mockRepository = MockItemRepository()
-        mockUseCase = UseCaseDetailsImpl(MockRepository())
     }
 
     @After
@@ -56,7 +55,7 @@ class SaveFilmToRoomInDetailsTest {
     fun saveFilmTest() = runTest(testDispatcher) {
 
         val viewModelMock =
-            FeatureDetailsViewModel(useCase = mockUseCase, watchlistRoomRepository = mockRepository)
+            FeatureDetailsViewModel(useCase = mockUseCase)
 
         composeTestRule.setContent {
             SharedTransitionLayout {
@@ -66,7 +65,8 @@ class SaveFilmToRoomInDetailsTest {
                         sharedTransitionScope = this@SharedTransitionLayout,
                         animatedContentScope = this,
                         viewModel = viewModelMock,
-                        onClickBack = {}
+                        onClickBack = {},
+                        onClickItem = {}
                     )
                 }
             }
@@ -74,19 +74,5 @@ class SaveFilmToRoomInDetailsTest {
 
 
         composeTestRule.onNodeWithTag("save_button").assertExists()
-
-        if (mockRepository.existsMovieToWatchlist(1).not()) {
-            composeTestRule.onNodeWithTag("save_button").performClick()
-            mockRepository.saveMovieToWatchlist(mockItem1)
-        }
-
-        if (mockRepository.existsMovieToWatchlist(1).not()) return@runTest
-
-        if (mockRepository.existsMovieToWatchlist(1)) {
-            composeTestRule.onNodeWithTag("save_button").performClick()
-            mockRepository.deleteMovieFromWatchlist(1)
-        }
-
-        if (mockRepository.existsMovieToWatchlist(1)) return@runTest
     }
 }

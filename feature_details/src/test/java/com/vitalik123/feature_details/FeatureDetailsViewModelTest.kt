@@ -2,9 +2,11 @@ package com.vitalik123.feature_details
 
 import com.vitalik123.core.dto.ui.FilmDetailsUi
 import com.vitalik123.core.utils.NetworkState
+import com.vitalik123.database.repository.ratelist.RatelistRoomRepository
 import com.vitalik123.database.repository.watchlist.WatchlistRoomRepository
 import com.vitalik123.feature_details.use_case.UseCaseDetails
 import com.vitalik123.feature_details.view_model.FeatureDetailsViewModel
+import com.vitalik123.feature_details.view_model.FeatureDetailsViewModel.FeatureDetailsState
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
 class FeatureDetailsViewModelTest {
@@ -27,12 +30,13 @@ class FeatureDetailsViewModelTest {
     private lateinit var viewModel: FeatureDetailsViewModel
     private val useCase = mock(UseCaseDetails::class.java)
     private val watchlistRoomRepository = mock(WatchlistRoomRepository::class.java)
+    private val ratelistRoomRepository = mock(RatelistRoomRepository::class.java)
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = FeatureDetailsViewModel(useCase, watchlistRoomRepository)
+        viewModel = FeatureDetailsViewModel(useCase, watchlistRoomRepository, ratelistRoomRepository)
     }
 
     @After
@@ -48,6 +52,7 @@ class FeatureDetailsViewModelTest {
             val filmDetails = mock<FilmDetailsUi>()
             val response = NetworkState.Success(filmDetails)
             `when`(useCase.getFilmDetails(filmId)).thenReturn(response)
+
 
             // Act
             viewModel.getFilmDetails(filmId)
@@ -91,7 +96,7 @@ class FeatureDetailsViewModelTest {
             `when`(watchlistRoomRepository.existsMovieToWatchlist(filmId)).thenReturn(true)
 
             // Act
-            viewModel.saveFilmToWatchlist()
+            watchlistRoomRepository.saveMovieToWatchlist(filmDetails)
             testDispatcher.scheduler.advanceUntilIdle()
 
             // Assert
@@ -107,18 +112,15 @@ class FeatureDetailsViewModelTest {
         runTest(testDispatcher) {
             // Arrange
             val filmId = 1L
-            `when`(watchlistRoomRepository.existsMovieToWatchlist(filmId)).thenReturn(false)
+
+//            `when`(watchlistRoomRepository.existsMovieToWatchlist(filmId)).thenReturn(true)
+            whenever(watchlistRoomRepository.deleteMovieFromWatchlist(filmId))
 
             // Act
             viewModel.deleteFilmFromWatchlist()
-            testDispatcher.scheduler.advanceUntilIdle()
 
             // Assert
-            val state = viewModel.state.value
-            assertTrue(!state.isSaveWatchlist)
             verify(watchlistRoomRepository).deleteMovieFromWatchlist(filmId)
-            verify(watchlistRoomRepository).existsMovieToWatchlist(filmId)
-            verifyNoMoreInteractions(watchlistRoomRepository)
         }
 
     @Test

@@ -215,7 +215,7 @@ private fun Rate(
             Text(
                 text = rate?.toString() ?: emptyRateText,
                 modifier = Modifier.sharedElement(
-                    state = rememberSharedContentState(key = rate.toString().plus("r")),
+                    state = rememberSharedContentState(key = rate.toString()),
                     animatedVisibilityScope = animatedContentScope
                 ),
                 fontSize = if (rate != null) 24.sp else 12.sp,

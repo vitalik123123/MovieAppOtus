@@ -69,7 +69,7 @@ fun FilmItemForHome(
                             .background(LocalColor.current.kinopoiskOrange)
                             .sharedElement(
                                 state = rememberSharedContentState(
-                                    key = film.rating.toString().plus("r")
+                                    key = film.rating.toString()
                                 ), animatedVisibilityScope = animatedContentScope
                             )
                             .padding(6.dp),

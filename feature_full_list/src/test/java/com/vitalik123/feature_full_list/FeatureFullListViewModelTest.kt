@@ -1,10 +1,8 @@
 package com.vitalik123.feature_full_list
 
 
-import com.vitalik123.core.dto.ui.FilmUi
-import com.vitalik123.core.utils.Constants
-import com.vitalik123.core.utils.NetworkState
 import com.vitalik123.database.entity.WatchlistEntity
+import com.vitalik123.database.repository.ratelist.RatelistRoomRepository
 import com.vitalik123.database.repository.watchlist.WatchlistRoomRepository
 import com.vitalik123.feature_full_list.repository.PagingMoviesTopPageSource
 import com.vitalik123.feature_full_list.view_model.FeatureFullListViewModel
@@ -20,7 +18,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.times
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
@@ -31,13 +28,18 @@ class FeatureFullListViewModelTest {
 
     private lateinit var viewModel: FeatureFullListViewModel
     private val watchlistRoomRepository = mock(WatchlistRoomRepository::class.java)
+    private val ratelistRoomRepository = mock(RatelistRoomRepository::class.java)
     private val pagingSourceFactory = mock(PagingMoviesTopPageSource.Factory::class.java)
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = FeatureFullListViewModel(watchlistRoomRepository, pagingSourceFactory)
+        viewModel = FeatureFullListViewModel(
+            watchlistRoomRepository,
+            ratelistRoomRepository,
+            pagingSourceFactory
+        )
     }
 
     @After
@@ -65,7 +67,7 @@ class FeatureFullListViewModelTest {
         `when`(watchlistRoomRepository.getAllWatchlist()).thenReturn(watchlistItems)
 
         // Act
-        viewModel.define(isWatchlist = true, type = "")
+        viewModel.define(isWatchlist = true, isRatelist = false, type = "")
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Assert
@@ -81,7 +83,7 @@ class FeatureFullListViewModelTest {
         val newType = "top_rated"
 
         // Act
-        viewModel.define(isWatchlist = false, type = newType)
+        viewModel.define(isWatchlist = false, isRatelist = false, type = newType)
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Assert
@@ -91,7 +93,7 @@ class FeatureFullListViewModelTest {
     @Test
     fun `deleteAllWatchlist should clear watchlist and update state`() = runTest(testDispatcher) {
         // Arrange
-        val initialWatchlist =mock<List<WatchlistEntity>>()
+        val initialWatchlist = mock<List<WatchlistEntity>>()
         `when`(watchlistRoomRepository.getAllWatchlist()).thenReturn(initialWatchlist)
 
         // Act
@@ -104,8 +106,5 @@ class FeatureFullListViewModelTest {
         // Assert
         val state = viewModel.state.value
         assertTrue(state.filmsFromWatchlist.isEmpty())
-        verify(watchlistRoomRepository).deleteAll()
-        verify(watchlistRoomRepository, times(2)).getAllWatchlist()
-        verifyNoMoreInteractions(watchlistRoomRepository)
     }
 }

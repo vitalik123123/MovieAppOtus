@@ -70,7 +70,7 @@ fun FilmForFullList(
                             .background(LocalColor.current.kinopoiskOrange)
                             .sharedElement(
                                 state = rememberSharedContentState(
-                                    key = rating.toString().plus("r")
+                                    key = rating.toString()
                                 ), animatedVisibilityScope = animatedContentScope
                             )
                             .padding(6.dp),

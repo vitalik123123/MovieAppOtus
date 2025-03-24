@@ -52,6 +52,10 @@ class FeatureDetailsViewModel @Inject constructor(
         }
     }
 
+    fun saveTest(filmMock: FilmDetailsUi) = viewModelScope.launch {
+        _state.update { ui -> ui.copy(filmDetails = filmMock) }
+    }
+
     fun getStaff(id: Long) = viewModelScope.launch {
         when (val response = useCase.getStaff(id)) {
             is NetworkState.Error -> {}

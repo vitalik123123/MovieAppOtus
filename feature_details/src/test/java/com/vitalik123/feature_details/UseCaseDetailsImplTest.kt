@@ -40,40 +40,43 @@ class UseCaseDetailsImplTest {
     }
 
     @Test
-    fun `getFilmsCollection should return Success with mapped data`() = runBlocking(testDispatcher) {
-        // Arrange
-        val filmMock = mock< FilmDetailsResponse>()
-        val id = 1L
-        whenever(repository.getFilmDetails(id)).thenReturn(
-            NetworkState.Success(filmMock)
-        )
+    fun `getFilmsCollection should return Success with mapped data`() =
+        runBlocking(testDispatcher) {
+            // Arrange
+            val filmMock = mock<FilmDetailsResponse>()
+            val id = 1L
+            whenever(repository.getFilmDetails(id)).thenReturn(
+                NetworkState.Success(filmMock)
+            )
 
-        // Act
-        val result = useCase.getFilmDetails(id)
+            // Act
+            val result = useCase.getFilmDetails(id)
+            testDispatcher.scheduler.advanceUntilIdle()
 
-        // Assert
-        assertTrue(result is NetworkState.Success)
-        assertEquals(filmMock, (result as NetworkState.Success).data)
-        verify(repository).getFilmDetails(id)
-        verifyNoMoreInteractions(repository)
-    }
+            // Assert
+            assertTrue(result is NetworkState.Success)
+            assertEquals(filmMock, (result as NetworkState.Success).data)
+            verify(repository).getFilmDetails(id)
+            verifyNoMoreInteractions(repository)
+        }
 
     @Test
-    fun `getFilmsCollection should return Error when repository returns Error`() = runBlocking(testDispatcher) {
-        // Arrange
-        val id = 1L
-        val error = Throwable("Network error")
-        `when`(repository.getFilmDetails(id)).thenReturn(NetworkState.Error(error))
+    fun `getFilmsCollection should return Error when repository returns Error`() =
+        runBlocking(testDispatcher) {
+            // Arrange
+            val id = 1L
+            val error = Throwable("Network error")
+            `when`(repository.getFilmDetails(id)).thenReturn(NetworkState.Error(error))
 
-        // Act
-        val result = useCase.getFilmDetails(id)
+            // Act
+            val result = useCase.getFilmDetails(id)
 
-        // Assert
-        assertTrue(result is NetworkState.Error)
-        assertEquals(error, (result as NetworkState.Error).error)
-        verify(repository).getFilmDetails(id)
-        verifyNoMoreInteractions(repository)
-    }
+            // Assert
+            assertTrue(result is NetworkState.Error)
+            assertEquals(error, (result as NetworkState.Error).error)
+            verify(repository).getFilmDetails(id)
+            verifyNoMoreInteractions(repository)
+        }
 
     @Test
     fun `getFilmsCollection should return ServerError when repository returns ServerError`() =
